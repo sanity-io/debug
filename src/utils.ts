@@ -1,9 +1,10 @@
 /**
  * Coerce `value`.
  */
-export function coerce(value: any): any {
+export function coerce(value: unknown): unknown {
   if (value instanceof Error) {
-    return value.stack || value.message
+    if (!value.stack) return value.message
+    return value.stack.includes(value.message) ? value.stack : `${value.message}\n${value.stack}`
   }
   return value
 }
@@ -12,16 +13,14 @@ export function coerce(value: any): any {
  * Selects a color for a debug namespace
  * @return An ANSI color code for the given namespace
  */
-export function selectColor(
-  colors: (string | number)[],
+export function selectColor<Color extends string | number>(
+  colors: Color[],
   namespace: string,
-): string | number {
+): Color {
   let hash = 0
 
   for (let i = 0; i < namespace.length; i++) {
-    // eslint-disable-next-line unicorn/prefer-code-point
     hash = (hash << 5) - hash + namespace.charCodeAt(i)
-    // eslint-disable-next-line unicorn/prefer-math-trunc
     hash |= 0 // Convert to 32bit integer
   }
 
@@ -41,8 +40,7 @@ export function matchesTemplate(search: string, template: string): boolean {
   while (searchIndex < search.length) {
     if (
       templateIndex < template.length &&
-      (template[templateIndex] === search[searchIndex] ||
-        template[templateIndex] === '*')
+      (template[templateIndex] === search[searchIndex] || template[templateIndex] === '*')
     ) {
       // Match character or proceed with wildcard
       if (template[templateIndex] === '*') {
@@ -53,7 +51,6 @@ export function matchesTemplate(search: string, template: string): boolean {
         searchIndex++
         templateIndex++
       }
-      // eslint-disable-next-line unicorn/no-negated-condition
     } else if (starIndex !== -1) {
       // Backtrack to the last '*' and try to match more characters
       templateIndex = starIndex + 1

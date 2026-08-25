@@ -1,0 +1,13 @@
+{
+  "extends": "@sanity/tsconfig/strictest",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "rootDir": ".",
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false,
+    "paths": {
+      "@sanity/debug": ["./src/node.ts"]
+    }
+  }
+}

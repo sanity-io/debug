@@ -1,77 +1,99 @@
 {
-  "name": "obug",
-  "type": "module",
-  "version": "2.1.4",
-  "packageManager": "pnpm@11.13.1",
-  "description": "A lightweight JavaScript debugging utility, forked from debug, featuring TypeScript and ESM support.",
-  "author": "Kevin Deng <sxzz@sxzz.moe>",
-  "license": "MIT",
-  "funding": [
-    "https://github.com/sponsors/sxzz",
-    "https://opencollective.com/debug"
+  "name": "@sanity/debug",
+  "version": "0.0.0",
+  "description": "Lightweight debugging utility for Node.js, browsers, and other runtimes",
+  "keywords": [
+    "debug",
+    "logging",
+    "sanity"
   ],
-  "homepage": "https://github.com/sxzz/obug#readme",
+  "homepage": "https://github.com/sanity-io/debug#readme",
+  "bugs": {
+    "url": "https://github.com/sanity-io/debug/issues"
+  },
+  "license": "MIT",
+  "author": "Sanity.io <hello@sanity.io>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sxzz/obug.git"
+    "url": "git+https://github.com/sanity-io/debug.git"
   },
-  "bugs": {
-    "url": "https://github.com/sxzz/obug/issues"
-  },
-  "sideEffects": false,
-  "exports": {
-    ".": {
-      "browser": "./dist/browser.js",
-      "node": "./dist/node.js",
-      "default": "./dist/browser.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "./dist/node.js",
-  "module": "./dist/node.js",
-  "browser": "./dist/browser.js",
-  "unpkg": "./dist/browser.min.js",
-  "jsdelivr": "./dist/browser.min.js",
-  "types": "./dist/browser.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
+  "type": "module",
+  "sideEffects": false,
+  "types": "./dist/default.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "browser": "./dist/default.js",
+      "react-server": "./dist/default.js",
+      "deno": "./dist/node.js",
+      "workerd": "./dist/default.js",
+      "worker": "./dist/default.js",
+      "bun": "./dist/node.js",
+      "node": "./dist/node.js",
+      "default": "./dist/default.js"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
-  "engines": {
-    "node": ">=12.20.0"
-  },
   "scripts": {
-    "lint": "eslint --cache .",
-    "lint:fix": "pnpm run lint --fix",
     "build": "tsdown",
+    "check": "pnpm run format && pnpm run lint:fix && pnpm run typecheck",
+    "coverage": "vitest run --coverage",
     "dev": "tsdown --watch",
-    "test": "vitest",
-    "test:coverage": "vitest --project node --coverage",
-    "play": "vite playground",
-    "typecheck": "tsgo --noEmit",
-    "format": "prettier --cache --write .",
-    "release": "bumpp",
-    "prepublishOnly": "pnpm run build"
+    "format": "oxfmt",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
+    "prepublishOnly": "pnpm run build",
+    "release": "changeset publish",
+    "test": "vitest run",
+    "test:all": "pnpm run test && pnpm run test:happy-dom && pnpm run test:jsdom && pnpm run test:browser && pnpm run test:bun && pnpm run test:deno && pnpm run test:vercel-edge && pnpm run test:react-server && pnpm run test:workerd && pnpm run test:smoke",
+    "test:browser": "pnpm test --config ./test/config/vitest.browser.config.ts",
+    "test:bun": "bun run vitest run --config ./test/config/vitest.bun.config.ts",
+    "test:deno": "pnpm run build && deno test --no-lock test/deno/smoke.ts",
+    "test:happy-dom": "pnpm test --config ./test/config/vitest.happy-dom.config.ts",
+    "test:jsdom": "pnpm test --config ./test/config/vitest.jsdom.config.ts",
+    "test:react-server": "pnpm test --config ./test/config/vitest.react-server.config.ts",
+    "test:smoke": "pnpm run build && pnpm run test:smoke:node && pnpm run test:smoke:workerd && pnpm run test:smoke:vercel-edge && pnpm run test:smoke:react-server && pnpm run test:smoke:happy-dom && pnpm run test:smoke:jsdom && pnpm run test:smoke:browser && pnpm run test:smoke:bun",
+    "test:smoke:browser": "pnpm test --config ./test/config/vitest.browser.smoke.config.ts",
+    "test:smoke:bun": "bun run ./test/bun/smoke.ts",
+    "test:smoke:happy-dom": "pnpm test --config ./test/config/vitest.happy-dom.smoke.config.ts",
+    "test:smoke:jsdom": "pnpm test --config ./test/config/vitest.jsdom.smoke.config.ts",
+    "test:smoke:node": "pnpm test --config ./test/config/vitest.node.smoke.config.ts",
+    "test:smoke:react-server": "pnpm test --config ./test/config/vitest.react-server.smoke.config.ts",
+    "test:smoke:vercel-edge": "pnpm test --config ./test/config/vitest.vercel-edge.smoke.config.ts",
+    "test:smoke:workerd": "pnpm test --config ./test/config/vitest.workerd.smoke.config.ts",
+    "test:vercel-edge": "pnpm test --config ./test/config/vitest.vercel-edge.config.ts",
+    "test:workerd": "pnpm test --config ./test/config/vitest.workerd.config.ts",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.check.json && tsc --noEmit -p tsconfig.check-node.json"
   },
   "devDependencies": {
-    "@sxzz/eslint-config": "^8.2.1",
-    "@sxzz/prettier-config": "^2.3.1",
-    "@types/debug": "^4.1.13",
-    "@types/node": "^26.1.1",
-    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "@changesets/cli": "^2.31.1",
+    "@cloudflare/vitest-pool-workers": "^0.19.1",
+    "@edge-runtime/vm": "^5.0.0",
+    "@sanity/tsconfig": "^2.1.0",
+    "@sanity/tsdown-config": "^0.21.0",
+    "@types/node": "^24.13.3",
+    "@vitest/browser": "^4.1.10",
     "@vitest/browser-playwright": "^4.1.10",
     "@vitest/coverage-v8": "^4.1.10",
-    "bumpp": "^11.1.0",
-    "debug": "^4.4.3",
-    "eslint": "^10.7.0",
+    "happy-dom": "^20.9.0",
+    "jsdom": "^30.0.1",
+    "ls-engines": "^0.10.1",
+    "oxfmt": "^0.52.0",
+    "oxlint": "^1.67.0",
     "playwright": "^1.61.1",
-    "prettier": "^3.9.5",
-    "tsdown": "^0.22.9",
-    "typescript": "^6.0.3",
-    "vite": "^8.1.5",
+    "tsdown": "^0.22.14",
+    "typescript": "6.0.3",
     "vitest": "^4.1.10"
   },
-  "prettier": "@sxzz/prettier-config"
+  "browserslist": "extends @sanity/browserslist-config",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "pnpm@11.13.1"
 }

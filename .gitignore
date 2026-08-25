@@ -1,7 +1,9 @@
 node_modules
 dist
 coverage
+.bundle-stats
 
 *.log
 .DS_Store
 .eslintcache
+.pnpm-store

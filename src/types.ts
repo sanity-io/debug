@@ -1,7 +1,8 @@
-import type { InspectOptions as NodeInspectOptions } from 'node:util'
-
-export interface InspectOptions extends NodeInspectOptions {
+export interface InspectOptions extends Record<string, unknown> {
+  colors?: boolean
+  depth?: number | null
   hideDate?: boolean
+  showHidden?: boolean
 }
 
 /**
@@ -10,11 +11,11 @@ export interface InspectOptions extends NodeInspectOptions {
  * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
  */
 export interface Formatters {
-  [formatter: string]: (this: Debugger, v: any) => string
+  [formatter: string]: (this: Debugger, value: unknown) => string
 }
 
 export interface Debugger extends Required<DebugOptions> {
-  (formatter: any, ...args: any[]): void
+  (formatter: unknown, ...args: unknown[]): void
 
   namespace: string
   enabled: boolean
@@ -24,14 +25,14 @@ export interface Debugger extends Required<DebugOptions> {
 
 export interface DebugOptions {
   useColors?: boolean
-  color?: string | number
+  color?: number
 
-  formatArgs?: (this: Debugger, diff: number, args: [string, ...any[]]) => void
+  formatArgs?: (this: Debugger, diff: number, args: unknown[]) => void
   formatters?: Formatters
   /** Node.js only */
   inspectOpts?: InspectOptions
   /** Humanize a duration in milliseconds */
   humanize?: (value: number) => string
 
-  log?: (this: Debugger, ...args: any[]) => void
+  log?: (this: Debugger, ...args: unknown[]) => void
 }

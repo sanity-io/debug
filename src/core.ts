@@ -1,5 +1,5 @@
-import { coerce, matchesTemplate } from './utils.ts'
-import type { Debugger, DebugOptions } from './types.ts'
+import {coerce, matchesTemplate} from './utils.js'
+import type {Debugger, DebugOptions} from './types.js'
 
 let globalNamespaces: string = ''
 
@@ -10,16 +10,13 @@ export function namespaces(): string {
   return globalNamespaces
 }
 
-export function createDebug(
-  namespace: string,
-  options: Required<DebugOptions>,
-): Debugger {
+export function createDebug(namespace: string, options: Required<DebugOptions>): Debugger {
   let prevTime: number | undefined
   let enableOverride: boolean | undefined
   let namespacesCache: string | undefined
   let enabledCache: boolean | undefined
 
-  const debug: Debugger = (...args: any[]) => {
+  function writeDebug(...args: unknown[]): void {
     if (!debug.enabled) {
       return
     }
@@ -37,7 +34,7 @@ export function createDebug(
 
     // Apply any `formatters` transformations
     let index = 0
-    args[0] = (args[0] as string).replace(/%([a-z%])/gi, (match, format) => {
+    args[0] = String(args[0]).replace(/%([a-z%])/gi, (match, format) => {
       // If we encounter an escaped % then don't increase the array index
       if (match === '%%') return '%'
 
@@ -55,24 +52,27 @@ export function createDebug(
     })
 
     // Apply env-specific formatting (colors, etc.)
-    options.formatArgs.call(debug, diff, args as [string, ...any[]])
+    options.formatArgs.call(debug, diff, args)
 
     debug.log(...args)
   }
-  debug.extend = function (this: Debugger, namespace: string, delimiter = ':') {
-    return createDebug(this.namespace + delimiter + namespace, {
-      useColors: this.useColors,
-      color: this.color,
-      formatArgs: this.formatArgs,
-      formatters: this.formatters,
-      inspectOpts: this.inspectOpts,
-      log: this.log,
-      humanize: this.humanize,
-    })
-  }
-  Object.assign(debug, options)
 
-  debug.namespace = namespace
+  const debug: Debugger = Object.assign(writeDebug, options, {
+    enabled: false,
+    namespace,
+    extend(this: Debugger, childNamespace: string, delimiter = ':'): Debugger {
+      return createDebug(this.namespace + delimiter + childNamespace, {
+        useColors: this.useColors,
+        color: this.color,
+        formatArgs: this.formatArgs,
+        formatters: this.formatters,
+        inspectOpts: this.inspectOpts,
+        log: this.log,
+        humanize: this.humanize,
+      })
+    },
+  })
+
   Object.defineProperty(debug, 'enabled', {
     enumerable: true,
     configurable: false,
@@ -92,19 +92,6 @@ export function createDebug(
     },
   })
 
-  // Never run the code below, this is just to make TypeScript happy
-  // eslint-disable-next-line no-constant-condition
-  if (false) {
-    debug.useColors = true
-    debug.color = 0
-    debug.formatArgs = () => {}
-    debug.formatters = {}
-    debug.inspectOpts = {}
-    debug.log = () => {}
-    debug.enabled = false
-    debug.humanize = String
-  }
-
   return debug
 }
 
@@ -117,11 +104,7 @@ export function enable(namespaces: string): void {
   names = []
   skips = []
 
-  const split = globalNamespaces
-    .trim()
-    .replace(/\s+/g, ',')
-    .split(',')
-    .filter(Boolean)
+  const split = globalNamespaces.trim().replace(/\s+/g, ',').split(',').filter(Boolean)
 
   for (const ns of split) {
     if (ns[0] === '-') {
@@ -136,10 +119,7 @@ export function enable(namespaces: string): void {
  * Disable debug output.
  */
 export function disable(): string {
-  const namespaces = [
-    ...names,
-    ...skips.map((namespace) => `-${namespace}`),
-  ].join(',')
+  const namespaces = [...names, ...skips.map((namespace) => `-${namespace}`)].join(',')
   enable('')
   return namespaces
 }
