@@ -22,7 +22,7 @@ importers:
         version: 2.2.1
       '@sanity/tsdown-config':
         specifier: ^0.21.0
-        version: 0.21.3(@babel/runtime@7.29.7)(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
+        version: 0.21.3(@babel/runtime@7.29.7)(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1))(typescript@6.0.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@types/node':
         specifier: ^24.13.3
         version: 24.13.3
@@ -55,10 +55,13 @@ importers:
         version: 1.61.1
       tsdown:
         specifier: ^0.22.14
-        version: 0.22.14(publint@0.3.24)(typescript@6.0.3)
+        version: 0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1)
       typescript:
         specifier: 6.0.3
         version: 6.0.3
+      unrun:
+        specifier: ^0.3.1
+        version: 0.3.1
       vitest:
         specifier: ^4.1.10
         version: 4.1.10(@edge-runtime/vm@5.0.0)(@types/node@24.13.3)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(happy-dom@20.11.6)(jsdom@30.0.1)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
@@ -3261,6 +3264,16 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
 
+  unrun@0.3.1:
+    resolution: {integrity: sha512-onIck/oNnCaytwths1ZVp1LK2Gq2hPoyFhiHebObuUXqR3S0uHuLLaBK8K6mRRgV7Ptip8AnNvaUsgzwWwBZuA==}
+    engines: {node: ^22.13.0 || >=24.0.0}
+    hasBin: true
+    peerDependencies:
+      synckit: ^0.11.11
+    peerDependenciesMeta:
+      synckit:
+        optional: true
+
   update-browserslist-db@1.3.1:
     resolution: {integrity: sha512-ZZ61DsRsOnakl74HAmp3oSN4aXUmEWXf+i/yv0h7tIBfICc3VdrFErQKUUKPgu3AMsTUMbcongALEN4l6GSUrQ==}
     hasBin: true
@@ -4502,18 +4515,18 @@ snapshots:
 
   '@sanity/tsconfig@2.2.1': {}
 
-  '@sanity/tsdown-config@0.21.3(@babel/runtime@7.29.7)(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3))(typescript@6.0.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
+  '@sanity/tsdown-config@0.21.3(@babel/runtime@7.29.7)(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1))(typescript@6.0.3)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))':
     dependencies:
       '@babel/core': 7.29.7
       '@rolldown/plugin-babel': 0.2.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.5)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       '@sanity/browserslist-config': 1.0.5
-      '@sanity/vanilla-extract-tsdown-plugin': 0.2.13(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3))
+      '@sanity/vanilla-extract-tsdown-plugin': 0.2.13(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1))
       '@vitejs/plugin-react': 6.1.0(@rolldown/plugin-babel@0.2.3(@babel/core@7.29.7)(@babel/runtime@7.29.7)(rolldown@1.2.5)(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0)))(vite@8.1.5(@types/node@24.13.3)(esbuild@0.28.1)(jiti@2.7.0)(yaml@2.9.0))
       browserslist: 4.28.8
       lightningcss: 1.33.0
       package-manager-detector: 1.8.0
       publint: 0.3.24
-      tsdown: 0.22.14(publint@0.3.24)(typescript@6.0.3)
+      tsdown: 0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1)
       typescript: 6.0.3
     transitivePeerDependencies:
       - '@babel/plugin-transform-runtime'
@@ -4542,10 +4555,10 @@ snapshots:
     transitivePeerDependencies:
       - babel-plugin-macros
 
-  '@sanity/vanilla-extract-tsdown-plugin@0.2.13(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3))':
+  '@sanity/vanilla-extract-tsdown-plugin@0.2.13(rolldown@1.2.5)(tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1))':
     dependencies:
       '@sanity/vanilla-extract-rolldown-plugin': 0.3.7(rolldown@1.2.5)
-      tsdown: 0.22.14(publint@0.3.24)(typescript@6.0.3)
+      tsdown: 0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1)
     transitivePeerDependencies:
       - babel-plugin-macros
       - rolldown
@@ -6563,7 +6576,7 @@ snapshots:
 
   treeverse@3.0.0: {}
 
-  tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3):
+  tsdown@0.22.14(publint@0.3.24)(typescript@6.0.3)(unrun@0.3.1):
     dependencies:
       ansis: 4.3.1
       cac: 7.0.0
@@ -6583,6 +6596,7 @@ snapshots:
     optionalDependencies:
       publint: 0.3.24
       typescript: 6.0.3
+      unrun: 0.3.1
     transitivePeerDependencies:
       - '@typescript/native-preview'
       - '@volar/typescript'
@@ -6660,6 +6674,10 @@ snapshots:
       pathe: 2.0.3
 
   universalify@0.1.2: {}
+
+  unrun@0.3.1:
+    dependencies:
+      rolldown: 1.2.5
 
   update-browserslist-db@1.3.1(browserslist@4.28.8):
     dependencies:
