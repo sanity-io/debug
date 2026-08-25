@@ -8,5 +8,5 @@
   "singleQuote": true,
   "quoteProps": "consistent",
   "bracketSpacing": false,
-  "ignorePatterns": [".changeset/*.md"]
+  "ignorePatterns": [".changeset/*.md", "CHANGELOG.md"]
 }
