@@ -1,6 +1,6 @@
 {
   "name": "@sanity/debug",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Lightweight debugging utility for Node.js, browsers, and other runtimes",
   "keywords": [
     "debug",
